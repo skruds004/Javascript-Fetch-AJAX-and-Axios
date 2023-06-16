@@ -1,4 +1,4 @@
-import * as bootstrap from "bootstrap";
+//import * as bootstrap from "./node_modules/bootstrap/dist/js/bootstrap.js";
 import { favourite } from "./index.js";
 
 export function createCarouselItem(imgSrc, imgAlt, imgId) {
@@ -38,9 +38,14 @@ export function start() {
     "#carouselExampleControls"
   );
   if (window.matchMedia("(min-width: 768px)").matches) {
-    const carousel = new bootstrap.Carousel(multipleCardCarousel, {
-      interval: false
-    });
+    //replace this stuff
+    // const carousel = new bootstrap.Carousel(multipleCardCarousel, {
+    //   interval: false
+    // });
+    //with this function call
+    $('#carouselExampleControls').carousel();
+
+
     const carouselWidth = $(".carousel-inner")[0].scrollWidth;
     const cardWidth = $(".carousel-item").width();
     let scrollPosition = 0;

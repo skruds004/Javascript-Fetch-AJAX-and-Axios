@@ -1,5 +1,5 @@
 import * as Carousel from "./Carousel.js";
-import axios from "axios";
+//import axios from "axios.min.js";
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -11,7 +11,7 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
-const API_KEY = "";
+const API_KEY = "live_l1KLxKyJ9NxCqmE4vatOqoc6B6Q98nfDHB3ylL1AJGDvZ9SxYp93OaxAEmCMNWKW";
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -21,6 +21,20 @@ const API_KEY = "";
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
+
+async function initialLoad() {
+    const response = await fetch('https://api.thecatapi.com/v1/breeds');
+    const jsonData = await response.json();
+    for (const breed of jsonData) {
+        let option = document.createElement('option');
+        option.value = breed.id;
+        option.name = breed.name;
+        option.innerText = breed.name;
+        breedSelect.appendChild(option);
+    }
+}
+
+initialLoad();
 
 /**
  * 2. Create an event handler for breedSelect that does the following:
@@ -36,6 +50,20 @@ const API_KEY = "";
  * - Each new selection should clear, re-populate, and restart the Carousel.
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
+
+breedSelect.addEventListener('change', async function(event) {
+    Carousel.clear();
+
+    const response = await fetch(`https://api.thecatapi.com/v1/images/search?breed_ids=${event.target.value}&limit=10`);
+    const jsonData = await response.json();
+    for (const image of jsonData) {
+        let img = Carousel.createCarouselItem(image.url, 'alt', image.id);
+        Carousel.appendCarousel(img);
+    }
+    console.log(jsonData);
+    Carousel.start();
+
+});
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
